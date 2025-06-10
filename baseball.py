@@ -86,6 +86,8 @@ class BaseballElimination:
         return max_flow < total_capacity
 
     def certificate_of_elimination(self, team):
+        if team not in self.teams:
+            raise ValueError(f"Team '{team}' not found.")
         # Se o time não está eliminado, não há certificado
         if not self.is_eliminated(team):
             return None
