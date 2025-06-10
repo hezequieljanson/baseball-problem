@@ -1,6 +1,6 @@
 from collections import deque
 # vizu
-from graph_visualizer import draw_flow_network
+#from graph_visualizer import draw_flow_network
 
 class BaseballElimination:
     def __init__(self, filename):
@@ -12,7 +12,7 @@ class BaseballElimination:
             self.losses = {}                   # Dicionário: time -> derrotas
             self.remaining = {}                # Dicionário: time -> jogos restantes
             self.against = {}                  # Dicionário: time -> {adversário: jogos restantes contra}
-            self.number_of_teams
+            self.number_of_teams = 0
 
             lines = f.readlines()
 
@@ -36,28 +36,28 @@ class BaseballElimination:
                     opponent = self.teams[j]
                     self.against[team][opponent] = int(parts[4 + j])
 
-    def number_of_teams(self):
+    def get_number_of_teams(self):
         return self.number_of_teams
     
-    def teams(self):
+    def get_teams(self):
         return self.teams
     
-    def wins(self, team):
+    def get_wins(self, team):
         if team not in self.teams:
             raise ValueError(f"Team '{team}' not found.")
         return self.wins[team]
     
-    def losses(self, team):
+    def get_losses(self, team):
         if team not in self.teams:
             raise ValueError(f"Team '{team}' not found.")
         return self.losses[team]
     
-    def remaining(self, team):
+    def get_remaining(self, team):
         if team not in self.teams:
             raise ValueError(f"Team '{team}' not found.")
         return self.remaining[team]
     
-    def against(self, team1, team2):
+    def get_against(self, team1, team2):
         if team1 not in self.teams or team2 not in self.teams:
             raise ValueError(f"One or both teams '{team1}' and '{team2}' not found.")
         return self.against[team1].get(team2, 0)
@@ -77,7 +77,7 @@ class BaseballElimination:
         graph, total_capacity = self.build_flow_network(team, max_possible)
 
         # Visualiza o grafo criado (opcional)
-        draw_flow_network(graph, 'source', 'sink', team)
+       # draw_flow_network(graph, 'source', 'sink', team)
 
         # Aplica Ford-Fulkerson para calcular o fluxo máximo
         max_flow = self.ford_fulkerson(graph, 'source', 'sink')
