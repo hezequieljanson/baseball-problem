@@ -12,6 +12,7 @@ class BaseballElimination:
             self.losses = {}                   # Dicionário: time -> derrotas
             self.remaining = {}                # Dicionário: time -> jogos restantes
             self.against = {}                  # Dicionário: time -> {adversário: jogos restantes contra}
+            self.number_of_teams
 
             lines = f.readlines()
 
@@ -20,6 +21,8 @@ class BaseballElimination:
                 parts = lines[i].split()
                 team = parts[0]
                 self.teams.append(team)
+            
+            self.number_of_teams = len(self.teams)
 
             # Lê as estatísticas e confrontos
             for i in range(self.n):
@@ -33,7 +36,35 @@ class BaseballElimination:
                     opponent = self.teams[j]
                     self.against[team][opponent] = int(parts[4 + j])
 
+    def number_of_teams(self):
+        return self.number_of_teams
+    
+    def teams(self):
+        return self.teams
+    
+    def wins(self, team):
+        if team not in self.teams:
+            raise ValueError(f"Team '{team}' not found.")
+        return self.wins[team]
+    
+    def losses(self, team):
+        if team not in self.teams:
+            raise ValueError(f"Team '{team}' not found.")
+        return self.losses[team]
+    
+    def remaining(self, team):
+        if team not in self.teams:
+            raise ValueError(f"Team '{team}' not found.")
+        return self.remaining[team]
+    
+    def against(self, team1, team2):
+        if team1 not in self.teams or team2 not in self.teams:
+            raise ValueError(f"One or both teams '{team1}' and '{team2}' not found.")
+        return self.against[team1].get(team2, 0)
+
     def is_eliminated(self, team):
+        if team not in self.teams:
+            raise ValueError(f"Team '{team}' not found.")
         # Calcula o número máximo de vitórias que esse time pode atingir
         max_possible = self.wins[team] + self.remaining[team]
 
