@@ -85,22 +85,31 @@ class BaseballElimination:
         return max_flow < total_capacity
 
     def certificate_of_elimination(self, team):
-        if team not in self.teams:
-            raise ValueError(f"Team '{team}' not found.")
-
+        # Calcula o número máximo de vitórias que o time pode alcançar
         max_possible = self.wins[team] + self.remaining[team]
+
+        # Verifica se há eliminação trivial
+        # Exemplo: alguém já tem mais vitórias do que o time pode alcançar
+        trivial_eliminators = [other for other in self.teams if other != team and self.wins[other] > max_possible]
+        if trivial_eliminators:
+            return trivial_eliminators
+
+        # Caso não seja trivial, constrói o grafo de fluxo e executa Ford-Fulkerson
         graph, _ = self.build_flow_network(team, max_possible)
         residual = self.build_residual_graph(graph)
 
-        # Executa fluxo máximo para atualizar o grafo residual
         self.ford_fulkerson(residual, 'source', 'sink')
 
-        # Realiza DFS no grafo residual a partir da source para encontrar o lado do corte
+        # ✅ 3. Realiza uma DFS no grafo residual a partir da 'source'
+        # para identificar o lado esquerdo do corte mínimo
         visited = set()
         self.dfs(residual, 'source', visited)
 
-        # Os times no lado da source que foram alcançados são os responsáveis pela eliminação
-        return sorted([t for t in self.teams if t in visited])
+        # ✅ 4. Retorna apenas os times reais que estão do lado da 'source'
+        # (eliminadores "culpados" pela eliminação)
+        eliminators = sorted([t for t in self.teams if t != team and t in visited])
+
+        return eliminators
 
     def build_flow_network(self, team, max_possible):
         graph = {}
