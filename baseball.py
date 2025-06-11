@@ -67,12 +67,6 @@ class BaseballElimination:
             raise ValueError(f"Team '{team}' not found.")
         # Calcula o número máximo de vitórias que esse time pode atingir
         max_possible = self.wins[team] + self.remaining[team]
-
-        # Verifica eliminação trivial: outro time já tem mais vitórias
-        for other in self.teams:
-            if other != team and self.wins[other] > max_possible:
-                return True
-
         # Monta o grafo de fluxo para checar eliminação por combinações de jogos
         graph, total_capacity = self.build_flow_network(team, max_possible)
 
@@ -81,6 +75,11 @@ class BaseballElimination:
 
         # Aplica Ford-Fulkerson para calcular o fluxo máximo
         max_flow = self.ford_fulkerson(graph, 'source', 'sink')
+        
+        # Verifica eliminação trivial: outro time já tem mais vitórias
+        for other in self.teams:
+            if other != team and self.wins[other] > max_possible:
+                return True
 
         # Se o fluxo não for suficiente para distribuir todos os jogos restantes, o time está eliminado
         return max_flow < total_capacity
@@ -88,9 +87,6 @@ class BaseballElimination:
     def certificate_of_elimination(self, team):
         if team not in self.teams:
             raise ValueError(f"Team '{team}' not found.")
-        # Se o time não está eliminado, não há certificado
-        if not self.is_eliminated(team):
-            return None
 
         max_possible = self.wins[team] + self.remaining[team]
         graph, _ = self.build_flow_network(team, max_possible)
