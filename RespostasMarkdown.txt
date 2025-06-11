@@ -1,0 +1,13 @@
+tu pode subir la pra mim?
+Respostas:
+
+1-
+A memória utilizada pelo programa é ditada pelo tamanho da rede de fluxo construída para a análise. Para uma divisão com n times, a rede possui para vértices (V): Um nó de origem, um de sumidouro, n-1 nós de time e até (n-1)(n-2)/2 nós de jogo. O número de vértices, portanto, cresce na ordem de O(n^2). Já as arestas (E): O número de arestas entre a origem, os nós de jogo, os nós de time e o sumidouro também cresce na ordem de O(n^2). Como a memória para armazenar o grafo é proporcional a V+E, a ordem de crescimento da memória necessária é O(n^2).
+
+2-
+
+O tempo de execução é majoritariamente consumido pelo algoritmo de fluxo máximo. Assumindo a complexidade de O(V * E^2) para o cálculo de fluxo máximo, e sabendo que V e E são da ordem de O(n^2), a complexidade para determinar se um único time está eliminado é: O(n^2 * (n^2)^2) = O(n^2 * n^4) = O(n^6).
+
+3- 
+
+A eliminação do Japão, de forma não técnica, é que o melhor cenário para o Japão é terminar a temporada com 6 vitórias (2 atuais + 4 restantes). O conjunto de times R = { Argentina Brazil China Cuba Egypt Iran Italy Poland Russia Serbia USA }, por sua vez, possui coletivamente 37 vitórias e ainda disputará 23 jogos apenas entre seus membros. Isso garante que, ao final da temporada, o número total de vitórias distribuídas dentro deste grupo será exatamente: 37 (atuais) + 23 (futuras) = 60 vitórias. O algoritmo de fluxo máximo prova que é impossível alocar essas 60 vitórias entre os 11 times de R de modo que todos terminem com 6 ou menos vitórias. Devido aos confrontos obrigatórios, pelo menos um time do grupo R inevitavelmente ultrapassará a marca de 6 vitórias, eliminando o Japão.
