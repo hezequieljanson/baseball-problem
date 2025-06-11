@@ -1,6 +1,6 @@
 from collections import deque
 # vizu
-#from graph_visualizer import draw_flow_network
+from graph_visualizer import draw_flow_network
 
 class BaseballElimination:
     def __init__(self, filename):
@@ -77,7 +77,7 @@ class BaseballElimination:
         graph, total_capacity = self.build_flow_network(team, max_possible)
 
         # Visualiza o grafo criado (opcional)
-       # draw_flow_network(graph, 'source', 'sink', team)
+        draw_flow_network(graph, 'source', 'sink', team)
 
         # Aplica Ford-Fulkerson para calcular o fluxo máximo
         max_flow = self.ford_fulkerson(graph, 'source', 'sink')
